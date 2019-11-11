@@ -15,7 +15,7 @@ function init(){
 
 			for ( let i = 0; i < responseJSON.length; i ++ ){
 				$('#studentList').append(`<li>
-											${responseJSON[i].name}
+											${responseJSON[i].firstName}
 										</li>`);
 			}
 		})
