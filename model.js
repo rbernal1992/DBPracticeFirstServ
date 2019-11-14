@@ -11,7 +11,12 @@ let studentSchema = mongoose.Schema({
 });
 
 let Student = mongoose.model( 'Student', studentSchema );
-
+let userSchema = mongoose.Schema({
+	username : { type : String },
+	password : { type : String },
+	
+});
+let Users = mongoose.model( 'Users', userSchema );
 
 let StudentList = {
 	get : function(){
@@ -60,8 +65,11 @@ let StudentList = {
 				});
 		
 	},
-}
+};
 
-module.exports = { StudentList };
+
+
+
+module.exports = { StudentList, Users };
 
 

@@ -4,6 +4,8 @@ let morgan = require( "morgan" );
 let mongoose = require( "mongoose" );
 let bodyParser = require( "body-parser" );
 let { StudentList } = require('./model');
+let { Users } = require('./model');
+let bcrypt = require('bcryptjs');
 const { DATABASE_URL, PORT } = require('./config');
 
 
@@ -190,6 +192,48 @@ app.delete( "/api/deleteStudent",( req, res, next ) =>{
 });
 
 let server;
+
+app.post( "/api/postUser", jsonParser, ( req, res, next ) => {
+	let username = req.body.username;
+	let password = req.body.password;
+	
+	let hashpass = bcrypt.hash(password,10); //encrypt
+	Users.create({
+		username,
+		password: hashpass
+	})
+	.then(user => {
+					return res.status(200).json(user);
+				})
+				.catch( error => {
+					throw Error(error);
+				});
+	
+	
+});
+
+app.post( "/api/postStudent", jsonParser, ( req, res, next ) => {
+	let username = req.body.username;
+	let password = req.body.password;
+	
+	let hashpass = bcrypt.hash(password,10); //encrypt
+	Users.get({
+		username
+	})
+	.then(user => {
+					if(bcrypt.compare(password, user.password)){
+					res.statusMessage = "logged in correctly!!!!";
+					return res.status(200).json({ message: "logged in"});
+					
+					}
+				})
+				.catch( error => {
+					throw Error(error);
+				});
+	
+	
+});
+
 
 function runServer(port, databaseUrl){
 	return new Promise( (resolve, reject ) => {
